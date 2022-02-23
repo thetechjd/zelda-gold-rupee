@@ -114,8 +114,8 @@ class App extends Component {
         <p>Buyer: {this.accounts}</p>
         <h2>KYC Whitelisting</h2>
         <p>
-          From the historic tales of Godric, the unmatched prowess of Albus, to the clever charm of Hermione. This house has attained glory unsurpassed and has always provided a light to vanquish the darkness.
-          There is no greater than honour than an official symbol of association with this noble house.
+          The Kingdom of Hyrule bestow upon thee the rarest rupee in all the land for your heroic deeds, and in good faith that you will not smash any more expensive pots. Seriously. Stop doing that. This token can be redeemed at any store in Hyrule and will never expire.
+          It is the highest symbol of wealth this kingdom shall recognize.
         </p>
         <p>
           Address to allow: <input type="text" name="kycAddress" value={this.state.kycAddress} onChange={this.handleInputChange} />
