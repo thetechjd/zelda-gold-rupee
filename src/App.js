@@ -4,17 +4,58 @@ import MyTokenSale from "./contracts/MyTokenSale.json";
 import KycContract from "./contracts/KycContract.json";
 import getWeb3 from "./getWeb3";
 import $ from "jquery";
+import { getEthPriceNow } from "get-eth-price";
+
+
 
 import "./App.css";
 import WaveLoading from "react-loadingg/lib/WaveLoading";
 
+
+
 class App extends Component {
   state = { loaded: false, kycAddress: "0x12434", tokenSaleAddress: null, userTokens: 0 };
 
+
+
+
+
+
   conversion = (event) => {
-    let amountETH = document.getElementById('sendAmount').value;
-    document.getElementById('converted').value = amountETH * 1000;
+    const { getEthPriceNow } = require('get-eth-price');
+    const checkvalue = document.getElementById('converted').value;
+    if (checkvalue != 0) {
+      let amountUSD = document.getElementById('converted').value;
+      getEthPriceNow()
+
+        .then(data => {
+          var rawdata = JSON.stringify(data);
+          var prices = rawdata.split(',')
+          var usd = prices[1].match(/\d+/g);
+          var ethusd = parseInt(usd[0]);
+          document.getElementById('sendAmount').value = amountUSD / ethusd;
+
+
+
+
+
+
+        })
+    }
+
+
+
   }
+
+
+
+
+
+
+
+
+
+
 
   componentDidMount = async () => {
     try {
@@ -43,12 +84,16 @@ class App extends Component {
         KycContract.networks[this.networkId] && KycContract.networks[this.networkId].address
       );
 
+
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.listenToTokenTransfer();
       this.setState({ loaded: true, tokenSaleAddress: MyTokenSale.networks[this.networkId].address }, this.updateUserTokens);
 
       document.addEventListener('keyup', this.conversion);
+
+
+
 
 
     } catch (error) {
@@ -97,18 +142,29 @@ class App extends Component {
 
   }
 
+
+
   handleKycWhitelisting = async () => {
     await this.KycContractInstance.methods.setKycCompleted(this.state.kycAddress).send({ from: this.accounts[0] });
     alert("KYC for " + this.state.kycAddress + " is completed");
   }
 
+
   render() {
+
+
     if (!this.state.loaded) {
       return <WaveLoading color='#000000' size='large' />;
     }
     return (
 
+
+
+
+
       <div className="App">
+        <div class="App-header"><a href="https://theascendantproject.com/">Ascendant</a></div>
+
         <h1>Zelda Gold Rupee(ZGR) Token Sale</h1>
         <p>Get your tokens today</p>
         <p>Buyer: {this.accounts}</p>
@@ -128,9 +184,10 @@ class App extends Component {
           <input type='email' id='email' placeholder='Email' required></input>
           <br></br>
           <br></br>
+          <input id='converted' type="number" name="funding" placeholder="USD" />
           <input type='number' placeholder='ETH' id='sendAmount' min='0' step='.000000000000000001' />
-          <input id='converted' type="text" class="form-control formBlock" name="funding" placeholder="ZGR" />
-          <button type="submit">Buy More ZGR Tokens</button>
+          <button id="buy" type="submit">Buy More ZGR Tokens</button>
+          <button id='download' type="button">Download Contract</button>
           <br></br>
           <br></br>
           <div class='authorization'>
@@ -139,9 +196,12 @@ class App extends Component {
 
         </form>
 
+
+
       </div>
     );
   }
-}
 
+
+}
 export default App;
