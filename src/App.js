@@ -4,6 +4,7 @@ import MyTokenSale from "./contracts/MyTokenSale.json";
 import KycContract from "./contracts/KycContract.json";
 import getWeb3 from "./getWeb3";
 import Terms from './terms';
+import Flash from './ReactiveButton';
 
 
 
@@ -195,8 +196,10 @@ class App extends Component {
           <input id='converted' type="number" name="funding" placeholder="USD" />
           <input type='number' placeholder='ETH' id='sendAmount' min='0' step='.000000000000000001' />
           <input id='output' type="text" name="token" placeholder="ZGR" />
-          <button id="buy" type="submit">Buy More ZGR Tokens</button>
+          <Flash
+          />
           <button id='download' type="button">Download Contract</button>
+
           <br></br>
           <br></br>
           <div class='authorization'>
