@@ -3,8 +3,9 @@ import Token from "./contracts/Token.json";
 import MyTokenSale from "./contracts/MyTokenSale.json";
 import KycContract from "./contracts/KycContract.json";
 import getWeb3 from "./getWeb3";
-import $ from "jquery";
-import { getEthPriceNow } from "get-eth-price";
+import Terms from './terms';
+
+
 
 
 
@@ -33,7 +34,8 @@ class App extends Component {
           var prices = rawdata.split(',')
           var usd = prices[1].match(/\d+/g);
           var ethusd = parseInt(usd[0]);
-          document.getElementById('sendAmount').value = amountUSD / ethusd;
+          document.getElementById('sendAmount').value = (amountUSD / ethusd).toFixed(3);
+          document.getElementById('output').value = (amountUSD / ethusd).toFixed(3);
 
 
 
@@ -41,6 +43,10 @@ class App extends Component {
 
 
         })
+    } else {
+      let amountETH = document.getElementById('sendAmount').value;
+      document.getElementById('output').value = amountETH;
+
     }
 
 
@@ -119,7 +125,7 @@ class App extends Component {
   handleMoreTokensPurchase = async (e) => {
     e.preventDefault();
     let transferAmount = e.target.sendAmount.value;
-    await this.TokenSaleInstance.methods.buyTokens(this.accounts[0]).send({ from: this.accounts[0], value: transferAmount * Math.pow(10, 18) })
+    await this.TokenSaleInstance.methods.buyTokens(this.accounts[0]).send({ from: this.accounts[0], value: Math.round(transferAmount * Math.pow(10, 18)) })
       ;
   }
 
@@ -177,8 +183,10 @@ class App extends Component {
           Address to allow: <input type="text" name="kycAddress" value={this.state.kycAddress} onChange={this.handleInputChange} />
           <button type="button" onClick={this.handleKycWhitelisting}>Add To Whitelist</button>
         </p>
+        <Terms />
+
         <h2>Buy Tokens</h2>
-        <p>¥ou currently have {this.state.userTokens} ZGR</p>
+        <p>You currently have {(this.state.userTokens) / Math.pow(10, 18)} ZGR</p>
         <p>If you want to buy tokens, send wei to this address: {this.state.tokenSaleAddress} </p>
         <form onSubmit={this.handleMoreTokensPurchase}>
           <input type='email' id='email' placeholder='Email' required></input>
@@ -186,6 +194,7 @@ class App extends Component {
           <br></br>
           <input id='converted' type="number" name="funding" placeholder="USD" />
           <input type='number' placeholder='ETH' id='sendAmount' min='0' step='.000000000000000001' />
+          <input id='output' type="text" name="token" placeholder="ZGR" />
           <button id="buy" type="submit">Buy More ZGR Tokens</button>
           <button id='download' type="button">Download Contract</button>
           <br></br>

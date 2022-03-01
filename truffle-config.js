@@ -7,7 +7,7 @@ const AccountIndex = 1;
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
   // to customize your Truffle configuration!
-  contracts_build_directory: path.join(__dirname, "client/src/contracts"),
+  contracts_build_directory: path.join(__dirname, "./src/contracts"),
   networks: {
     develop: {
       port: 7545,
@@ -16,9 +16,9 @@ module.exports = {
     },
     ganache_local: {
       provider: function () {
-        return new HDWalletProvider(process.env.MNEMONIC, "http://127.0.0.1:7545", AccountIndex)
+        return new HDWalletProvider(process.env.MNEMONIC, "http://127.0.0.1:7545")
       },
-      network_id: 5777
+      network_id: 1337
     },
     goerli_infura: {
       provider: function () {
@@ -34,9 +34,10 @@ module.exports = {
     },
     ropsten_infura: {
       provider: function () {
-        return new HDWalletProvider(process.env.MNEMONIC, "https://ropsten.infura.io/v3/fee8917ab09e4e409ada6f602b288672", AccountIndex)
+        return new HDWalletProvider(process.env.MNEMONIC, "https://ropsten.infura.io/v3/1d05071c42a04801ad3fd372fa386d23", AccountIndex)
       },
-      network_id: 3
+      network_id: 3,
+      gas: 300000
     }
   },
   compilers: {
@@ -44,5 +45,6 @@ module.exports = {
       version: "0.6.2"
     }
   }
+
 };
 
